@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'weatherb/api'
 require 'weatherb/error'
 require 'weatherb/version'
 
