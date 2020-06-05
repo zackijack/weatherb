@@ -6,7 +6,7 @@ require 'faraday_middleware/raise_error'
 module Weatherb
   # API object manage the default properties for fulfilling an API request.
   class API
-    CLIMACELL_API_URL = 'https://api.climacell.co/v3'
+    API_URL = 'https://api.climacell.co/v3'
 
     DEFAULT_FIELDS = %w[
       temp
@@ -55,6 +55,11 @@ module Weatherb
       moon_phase
     ].freeze
 
+    DEFAULT_DAILY_FIELDS = %w[
+      precipitation_probability
+      precipitation_accumulation
+    ].freeze
+
     SUCCESS_STATUSES = (200..300).freeze
 
     # Create a new instance of the Weatherb::API using your API key.
@@ -64,7 +69,7 @@ module Weatherb
     def initialize(api_key)
       @api_key = api_key
 
-      @connection = Faraday.new CLIMACELL_API_URL do |conn|
+      @connection = Faraday.new API_URL do |conn|
         conn.response :json, content_type: /\bjson$/
 
         conn.use FaradayMiddleware::RaiseError
@@ -149,6 +154,41 @@ module Weatherb
     # @return [Hash]
     def hourly(lat:, lon:, unit_system: 'si', start_time: 'now', end_time: nil, fields: DEFAULT_FIELDS | DEFAULT_HOURLY_FIELDS)
       path = 'weather/forecast/hourly'
+
+      query = {
+        apikey: @api_key,
+        lat: lat,
+        lon: lon,
+        unit_system: unit_system,
+        start_time: start_time,
+        end_time: end_time,
+        fields: fields
+      }
+
+      response = @connection.get(path, query)
+      response_body(response)
+    end
+
+    # Daily (<= 15d out)
+    # The daily API call provides a global daily forecast with summaries up to
+    # 15 days out.
+    #
+    # Note
+    # Daily results are returned and calculated based on 6am to 6am periods
+    # (meteorological timeframe) in UTC (GMT+0). Therefore, requesting forecast
+    # for locations with negative GMT offset may provide the first element with
+    # yesterday's date.
+    #
+    # @param lat [Float] Latitude, -87 to 89.
+    # @param lon [Float] Longitude, -180 to 180.
+    # @param unit_system [String] Unit system, "si" or "us".
+    # @param start_time [String] Start time in ISO 8601 format "2019-03-20T14:09:50Z", or "now".
+    # @param end_time [String] End time in ISO 8601 format "2019-03-20T14:09:50Z".
+    # @param fields [Array<String>] Selected fields from ClimaCell data layer (such as "precipitation" or "wind_gust").
+    #
+    # @return [Hash]
+    def daily(lat:, lon:, unit_system: 'si', start_time: 'now', end_time: nil, fields: DEFAULT_FIELDS | DEFAULT_DAILY_FIELDS)
+      path = 'weather/forecast/daily'
 
       query = {
         apikey: @api_key,
