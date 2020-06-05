@@ -43,6 +43,18 @@ module Weatherb
       surface_shortwave_radiation
     ].freeze
 
+    DEFAULT_HOURLY_FIELDS = %w[
+      dewpoint
+      wind_gust
+      precipitation_type
+      precipitation_probability
+      cloud_cover
+      cloud_base
+      cloud_ceiling
+      surface_shortwave_radiation
+      moon_phase
+    ].freeze
+
     SUCCESS_STATUSES = (200..300).freeze
 
     # Create a new instance of the Weatherb::API using your API key.
@@ -114,6 +126,35 @@ module Weatherb
         lon: lon,
         unit_system: unit_system,
         timestep: timestep,
+        start_time: start_time,
+        end_time: end_time,
+        fields: fields
+      }
+
+      response = @connection.get(path, query)
+      response_body(response)
+    end
+
+    # Hourly (<= 96hr out)
+    # The hourly call provides a global hourly forecast, up to 96 hours
+    # (4 days) out, for a specific location.
+    #
+    # @param lat [Float] Latitude, -87 to 89.
+    # @param lon [Float] Longitude, -180 to 180.
+    # @param unit_system [String] Unit system, "si" or "us".
+    # @param start_time [String] Start time in ISO 8601 format "2019-03-20T14:09:50Z", or "now".
+    # @param end_time [String] End time in ISO 8601 format "2019-03-20T14:09:50Z".
+    # @param fields [Array<String>] Selected fields from ClimaCell data layer (such as "precipitation" or "wind_gust").
+    #
+    # @return [Hash]
+    def hourly(lat:, lon:, unit_system: 'si', start_time: 'now', end_time: nil, fields: DEFAULT_FIELDS | DEFAULT_HOURLY_FIELDS)
+      path = 'weather/forecast/hourly'
+
+      query = {
+        apikey: @api_key,
+        lat: lat,
+        lon: lon,
+        unit_system: unit_system,
         start_time: start_time,
         end_time: end_time,
         fields: fields
