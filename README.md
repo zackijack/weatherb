@@ -20,7 +20,37 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To be able to use this gem, you need a ClimaCell account. [Sign in](https://developer.climacell.co/sign-in) to your ClimaCell account and visit the [dashboard](https://developer.climacell.co/dashboard/overview), there you'll find your API key.
+```ruby
+weatherb = Weatherb::API.new('this-is-your-api-key')
+
+# Return a observational data at the present time
+realtime = weatherb.realtime(lat: 40.784449, lon: -73.965208)
+
+# Return a forecast data on a minute-by-minute basis
+nowcast = weatherb.nowcast(lat: 40.784449, lon: -73.965208)
+
+# Return a forecast data on an hourly basis
+hourly = weatherb.hourly(lat: 40.784449, lon: -73.965208)
+
+# Return a forecast data on  a daily basis
+daily = weatherb.daily(lat: 40.784449, lon: -73.965208)
+```
+The example above uses the [default values](DEFAULT_VALUES.md), you can also add some additional parameters.
+```ruby
+# You can change the unit system into Royal (us), the default is Metric (si)
+us_realtime = weatherb.realtime(lat: 40.784449, lon: -73.965208, unit_system: 'us')
+
+# You can also specify the return field(s)
+temp__humidity_hourly = weatherb.hourly(lat: 40.784449, lon: -73.965208, fields: ['temp', 'humidity'])
+
+# And timestep for nowcast
+ten_minutes_nowcast =  weatherb.nowcast(lat: 40.784449, lon: -73.965208, timestep: 10)
+
+# Also start time and end time for nowcast, hourly, and daily API
+next_time_daily = weatherb.daily(lat: 40.784449, lon: -73.965208, start_time: '2020-06-16T23:59:00', end_time: '2020-06-20T12:00:00')
+```
+Find out more about the ClimeCell API in [their documentation](https://developer.climacell.co/v3/reference).
 
 ## Development
 
