@@ -2,9 +2,9 @@
 
 source 'https://rubygems.org'
 
-gem 'dotenv', require: false
-gem 'geocoder'
-gem 'sinatra'
-gem 'sinatra-contrib'
-gem 'sinatra-param', require: 'sinatra/param'
-gem 'weatherb'
+gem 'dotenv', '~> 2.7', require: false
+gem 'geocoder', '~> 1.6'
+gem 'sinatra', '~> 2.0'
+gem 'sinatra-contrib', '~> 2.0'
+gem 'sinatra-param', '~> 1.6', require: 'sinatra/param'
+gem 'weatherb', '~> 0.1'

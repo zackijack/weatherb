@@ -1,16 +1,19 @@
 # frozen_string_literal: true
 
+require 'dotenv'
 require 'geocoder'
 require 'sinatra/base'
 require 'sinatra/json'
 require 'sinatra/param'
-require 'dotenv'
 require 'weatherb'
 
 # Sinatra subclass
 class REST < Sinatra::Base
   helpers Sinatra::Param
+
   set :show_exceptions, false
+  set :raise_sinatra_param_exceptions, true
+
   Dotenv.load
 
   API_KEY = ENV['CLIMACELL_API_KEY']
@@ -30,8 +33,6 @@ class REST < Sinatra::Base
     geocoding = Geocoder.search(params[:location])
     lat, lon = geocoding.first.coordinates
     address = geocoding.first.address
-
-    puts params[:unit_system]
 
     result = if params[:fields].nil?
                weatherb.send(
@@ -55,8 +56,14 @@ class REST < Sinatra::Base
     content_type :json
 
     e = env['sinatra.error']
-    status e.status_code
-    { status: e.status_code, message: e.message }.to_json
+
+    invalid_param = e.is_a?(Sinatra::Param::InvalidParameterError)
+
+    status = invalid_param ? 400 : e.status_code
+    message = invalid_param ? "#{e.param}: #{e.message}" : e.message
+
+    status status
+    { status: status, message: message }.to_json
   end
 
   run!

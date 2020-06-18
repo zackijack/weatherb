@@ -32,12 +32,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dotenv
-  geocoder
-  sinatra
-  sinatra-contrib
-  sinatra-param
-  weatherb
+  dotenv (~> 2.7)
+  geocoder (~> 1.6)
+  sinatra (~> 2.0)
+  sinatra-contrib (~> 2.0)
+  sinatra-param (~> 1.6)
+  weatherb (~> 0.1)
 
 BUNDLED WITH
    2.1.4
