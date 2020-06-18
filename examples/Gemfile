@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'dotenv', require: false
+gem 'geocoder'
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'sinatra-param', require: 'sinatra/param'
+gem 'weatherb'

@@ -50,6 +50,8 @@ ten_minutes_nowcast =  weatherb.nowcast(lat: 40.784449, lon: -73.965208, timeste
 # Also start time and end time for nowcast, hourly, and daily API
 next_time_daily = weatherb.daily(lat: 40.784449, lon: -73.965208, start_time: '2020-06-16T23:59:00', end_time: '2020-06-20T12:00:00')
 ```
+To understand better how to implement this gem, you could check the application examples provided in the [examples folder](examples/README.md).
+
 Find out more about the ClimeCell API in [their documentation](https://developer.climacell.co/v3/reference).
 
 ## Development
@@ -60,7 +62,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/zackijack/weatherb. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/zackijack/weatherb/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/zackijack/weatherb. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](CODE_OF_CONDUCT.md).
 
 
 ## License
@@ -69,4 +71,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Weatherb project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/zackijack/weatherb/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Weatherb project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
