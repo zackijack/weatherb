@@ -7,5 +7,5 @@ gemspec
 
 gem 'faraday', '~> 1.0'
 gem 'faraday_middleware', '~> 1.0'
-gem 'rake', '~> 12.0'
-gem 'rspec', '~> 3.0'
+gem 'rake', '~> 13.0'
+gem 'rspec', '~> 3.9'

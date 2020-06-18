@@ -50,7 +50,7 @@ ten_minutes_nowcast =  weatherb.nowcast(lat: 40.784449, lon: -73.965208, timeste
 # Also start time and end time for nowcast, hourly, and daily API
 next_time_daily = weatherb.daily(lat: 40.784449, lon: -73.965208, start_time: '2020-06-16T23:59:00', end_time: '2020-06-20T12:00:00')
 ```
-To understand better how to implement this gem, you could check the application examples provided in the [examples folder](examples/README.md).
+To understand better how to implement this gem, you could check the application examples provided in the [examples folder](examples).
 
 Find out more about the ClimeCell API in [their documentation](https://developer.climacell.co/v3/reference).
 
