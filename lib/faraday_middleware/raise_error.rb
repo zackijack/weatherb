@@ -11,21 +11,21 @@ module FaradayMiddleware
       @app.call(env).on_complete do |response|
         case response[:status].to_i
         when 400
-          raise Weatherb::BadRequest, error_message(response)
+          raise Weatherb::BadRequest.new(error_message(response), 400)
         when 401
-          raise Weatherb::Unauthorized, error_message(response)
+          raise Weatherb::Unauthorized.new(error_message(response), 401)
         when 403
-          raise Weatherb::Forbidden, error_message(response)
+          raise Weatherb::Forbidden.new(error_message(response), 403)
         when 429
-          raise Weatherb::TooManyRequests, error_message(response)
+          raise Weatherb::TooManyRequests.new(error_message(response), 429)
         when 500
-          raise Weatherb::InternalServerError, error_message(response)
+          raise Weatherb::InternalServerError.new(error_message(response), 500)
         when CLIENT_ERROR_STATUSES
-          raise Weatherb::ClientError, error_message(response)
+          raise Weatherb::ClientError.new(error_message(response), 400)
         when SERVER_ERROR_STATUSES
-          raise Weatherb::ServerError, error_message(response)
+          raise Weatherb::ServerError.new(error_message(response), 500)
         when nil
-          raise Weatherb::NilStatusError, error_message(response)
+          raise Weatherb::NilStatusError.new(error_message(response), 0)
         end
       end
     end
