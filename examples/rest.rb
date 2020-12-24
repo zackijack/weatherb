@@ -23,7 +23,7 @@ class REST < Sinatra::Base
   end
 
   get '/:type/:location' do
-    param :type, String, in: %w[realtime nowcast hourly daily], transform: :downcase
+    param :type, String, in: %w[realtime nowcast hourly daily climacell station], transform: :downcase
     param :location, String
     param :unit_system, String, in: %w[si us], transform: :downcase, default: 'si'
     param :fields, Array

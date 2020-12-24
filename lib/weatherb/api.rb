@@ -60,6 +60,36 @@ module Weatherb
       precipitation_accumulation
     ].freeze
 
+    DEFAULT_CLIMACELL_FIELDS = %w[
+      precipitation_type
+      dewpoint
+      wind_gust
+      cloud_cover
+      cloud_ceiling
+      cloud_base
+      surface_shortwave_radiation
+    ].freeze
+
+    DEFAULT_STATION_FIELDS = %w[
+      precipitation
+      precipitation_type
+      temp
+      feels_like
+      dewpoint
+      wind_speed
+      wind_gust
+      baro_pressure
+      visibility
+      humidity
+      wind_direction
+      sunrise
+      sunset
+      cloud_cover
+      cloud_ceiling
+      cloud_base
+      weather_groups
+    ].freeze
+
     SUCCESS_STATUSES = (200..300).freeze
 
     # Create a new instance of the Weatherb::API using your API key.
@@ -189,6 +219,69 @@ module Weatherb
     # @return [Hash]
     def daily(lat:, lon:, unit_system: 'si', start_time: 'now', end_time: nil, fields: DEFAULT_FIELDS | DEFAULT_DAILY_FIELDS)
       path = 'weather/forecast/daily'
+
+      query = {
+        apikey: @api_key,
+        lat: lat,
+        lon: lon,
+        unit_system: unit_system,
+        start_time: start_time,
+        end_time: end_time,
+        fields: fields
+      }
+
+      response = @connection.get(path, query)
+      response_body(response)
+    end
+
+    # ClimaCell (<= 6h back)
+    # ClimaCell’s proprietary historical weather information is provided 
+    # up to 6 hours in the past.
+    #
+    # @param lat [Float] Latitude, -87 to 89.
+    # @param lon [Float] Longitude, -180 to 180.
+    # @param unit_system [String] Unit system, "si" or "us".
+    # @param start_time [String] Start time in ISO 8601 format "2019-03-20T14:09:50Z".
+    # @param end_time [String] End time in ISO 8601 format "2019-03-20T14:09:50Z", or "now".
+    # @param fields [Array<String>] Selected fields from ClimaCell data layer (such as "precipitation" or "wind_gust").
+    #
+    # @return [Hash]
+    def climacell(lat:, lon:, unit_system: 'si', start_time: nil, end_time: 'now', fields: DEFAULT_FIELDS | DEFAULT_CLIMACELL_FIELDS)
+      path = 'weather/historical/climacell'
+
+      query = {
+        apikey: @api_key,
+        lat: lat,
+        lon: lon,
+        unit_system: unit_system,
+        start_time: start_time,
+        end_time: end_time,
+        fields: fields
+      }
+
+      response = @connection.get(path, query)
+      response_body(response)
+    end
+
+    # Station (<= 6wk back)
+    # Historical weather station information is provided 
+    # globally from 4 weeks in the past to the present. 
+    # United States METAR and additional stations are included.
+    #
+    # Note
+    # Up to 24 hours of information can be provided per API call. 
+    # If you'd like to get data in bulk, check out ClimaCell's Weather for AI.
+    #
+    # @param lat [Float] Latitude, -87 to 89.
+    # @param lon [Float] Longitude, -180 to 180.
+    # @param unit_system [String] Unit system, "si" or "us".
+    # @param start_time [String] Start time in ISO 8601 format "2019-03-20T14:09:50Z".
+    # @param end_time [String] End time in ISO 8601 format "2019-03-20T14:09:50Z", or "now".
+    # @param fields [Array<String>] Selected fields from ClimaCell data layer (such as "precipitation" or "wind_gust").
+    #
+    # @return [Hash]
+    def station(lat:, lon:, unit_system: 'si', start_time: nil, end_time: 'now', fields: DEFAULT_STATION_FIELDS)
+      path = 'weather/historical/station'
 
       query = {
         apikey: @api_key,
